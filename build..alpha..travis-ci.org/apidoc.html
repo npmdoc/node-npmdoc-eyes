@@ -1,0 +1,249 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+    >eyes (v0.1.8)</a>
+</h1>
+<h4>a customizable value inspector</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.eyes">module eyes</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.eyes.inspect">
+            function <span class="apidocSignatureSpan">eyes.</span>inspect
+            <span class="apidocSignatureSpan">(obj, label, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.eyes.inspector">
+            function <span class="apidocSignatureSpan">eyes.</span>inspector
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.eyes.print">
+            function <span class="apidocSignatureSpan">eyes.</span>print
+            <span class="apidocSignatureSpan">(str, label, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.eyes.stylize">
+            function <span class="apidocSignatureSpan">eyes.</span>stylize
+            <span class="apidocSignatureSpan">(str, style, styles)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">eyes.</span>defaults</span>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.eyes" id="apidoc.module.eyes">module eyes</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.eyes.inspect" id="apidoc.element.eyes.inspect">
+        function <span class="apidocSignatureSpan">eyes.</span>inspect
+        <span class="apidocSignatureSpan">(obj, label, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">inspect = function (obj, label, options) {
+    options = merge(this.defaults, options || {});
+
+    if (options.stream) {
+        return this.print(stringify(obj, options), label, options);
+    } else {
+        return stringify(obj, options) + (options.styles ? &#x27;\033[39m&#x27; : &#x27;&#x27;);
+    }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+a customizable value inspector for Node.js
+
+synopsis
+--------
+
+I was tired of looking at cluttered output in the console -- something needed to be done,
+`sys.<span class="apidocCodeKeywordSpan">inspect</span>()` didn&#x27;t display regexps correctly, and was too verbose, and I had
+ an hour or two to spare.
+So I decided to have some fun. _eyes_ were born.
+
+![eyes-ss](http://dl.dropbox.com/u/251849/eyes-js-ss.gif)
+
+_example of the output of a user-customized eyes.js inspector_
+
+*eyes* also deals with circular objects in an intelligent way, and can pretty-print object literals.
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.eyes.inspector" id="apidoc.element.eyes.inspector">
+        function <span class="apidocSignatureSpan">eyes.</span>inspector
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">inspector = function (options) {
+    var that = this;
+    return function (obj, label, opts) {
+        return that.inspect.call(that, obj, label,
+            merge(options || {}, opts || {}));
+    };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+_example of the output of a user-customized eyes.js inspector_
+
+*eyes* also deals with circular objects in an intelligent way, and can pretty-print object literals.
+
+usage
+-----
+
+var inspect = require(&#x27;eyes&#x27;).<span class="apidocCodeKeywordSpan">inspector</span>({styles: {all: &#x27;magenta&#x27;}});
+
+inspect(something); // inspect with the settings passed to `inspector`
+
+or
+
+var eyes = require(&#x27;eyes&#x27;);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.eyes.print" id="apidoc.element.eyes.print">
+        function <span class="apidocSignatureSpan">eyes.</span>print
+        <span class="apidocSignatureSpan">(str, label, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">print = function (str, label, options) {
+    for (var c = 0, i = 0; i &#x3c; str.length; i++) {
+        if (str.charAt(i) === &#x27;\033&#x27;) { i += 4 } // `4` because &#x27;\033[25m&#x27;.length + 1 == 5
+        else if (c === options.maxLength) {
+           str = str.slice(0, i - 1) + &#x27;…&#x27;;
+           break;
+        } else { c++ }
+    }
+    return options.stream.write.call(options.stream, (label ?
+        this.stylize(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#x27;&#x27;) +
+        this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.eyes.stylize" id="apidoc.element.eyes.stylize">
+        function <span class="apidocSignatureSpan">eyes.</span>stylize
+        <span class="apidocSignatureSpan">(str, style, styles)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">stylize = function (str, style, styles) {
+    var codes = {
+        &#x27;bold&#x27;      : [1,  22],
+        &#x27;underline&#x27; : [4,  24],
+        &#x27;inverse&#x27;   : [7,  27],
+        &#x27;cyan&#x27;      : [36, 39],
+        &#x27;magenta&#x27;   : [35, 39],
+        &#x27;blue&#x27;      : [34, 39],
+        &#x27;yellow&#x27;    : [33, 39],
+        &#x27;green&#x27;     : [32, 39],
+        &#x27;red&#x27;       : [31, 39],
+        &#x27;grey&#x27;      : [90, 39]
+    }, endCode;
+
+    if (style &#x26;&#x26; codes[style]) {
+        endCode = (codes[style][1] === 39 &#x26;&#x26; styles.all) ? codes[styles.all][0]
+                                                         : codes[style][1];
+        return &#x27;\033[&#x27; + codes[style][0] + &#x27;m&#x27; + str +
+               &#x27;\033[&#x27; + endCode + &#x27;m&#x27;;
+    } else { return str }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
