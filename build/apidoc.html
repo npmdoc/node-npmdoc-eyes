@@ -97,7 +97,59 @@
 
         <li>
 
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan"></span>eyes</span>
+
+        </li>
+
+        <li>
+
             <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">eyes.</span>defaults</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.eyes.eyes">module eyes.eyes</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.eyes.eyes.inspect">
+            function <span class="apidocSignatureSpan">eyes.eyes.</span>inspect
+            <span class="apidocSignatureSpan">(obj, label, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.eyes.eyes.inspector">
+            function <span class="apidocSignatureSpan">eyes.eyes.</span>inspector
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.eyes.eyes.print">
+            function <span class="apidocSignatureSpan">eyes.eyes.</span>print
+            <span class="apidocSignatureSpan">(str, label, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.eyes.eyes.stylize">
+            function <span class="apidocSignatureSpan">eyes.eyes.</span>stylize
+            <span class="apidocSignatureSpan">(str, style, styles)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">eyes.eyes.</span>defaults</span>
 
         </li>
 
@@ -200,7 +252,23 @@ var eyes = require(&#x27;eyes&#x27;);
         this.stylize(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#x27;&#x27;) +
         this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+// If we have a `stream` defined, use it to print a styled string,
+// if not, we just return the stringified object.
+eyes.inspect = function (obj, label, options) {
+    options = merge(this.defaults, options || {});
+
+    if (options.stream) {
+        return this.<span class="apidocCodeKeywordSpan">print</span>(stringify(obj, options), label, options);
+    } else {
+        return stringify(obj, options) + (options.styles ? &#x27;\033[39m&#x27; : &#x27;&#x27;);
+    }
+};
+
+// Output using the &#x27;stream&#x27;, and an optional label
+// Loop through `str`, and truncate it after `options.maxLength` has been reached.
+...</pre></li>
     </ul>
 
 
@@ -233,7 +301,195 @@ var eyes = require(&#x27;eyes&#x27;);
                &#x27;\033[&#x27; + endCode + &#x27;m&#x27;;
     } else { return str }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+        if (str.charAt(i) === &#x27;\033&#x27;) { i += 4 } // `4` because &#x27;\033[25m&#x27;.length + 1 == 5
+        else if (c === options.maxLength) {
+           str = str.slice(0, i - 1) + &#x27;…&#x27;;
+           break;
+        } else { c++ }
+    }
+    return options.stream.write.call(options.stream, (label ?
+        this.<span class="apidocCodeKeywordSpan">stylize</span>(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#
+x27;&#x27;) +
+        this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
+};
+
+// Apply a style to a string, eventually,
+// I&#x27;d like this to support passing multiple
+// styles.
+eyes.stylize = function (str, style, styles) {
+...</pre></li>
+    </ul>
+
+
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.eyes.eyes" id="apidoc.module.eyes.eyes">module eyes.eyes</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.eyes.eyes.inspect" id="apidoc.element.eyes.eyes.inspect">
+        function <span class="apidocSignatureSpan">eyes.eyes.</span>inspect
+        <span class="apidocSignatureSpan">(obj, label, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">inspect = function (obj, label, options) {
+    options = merge(this.defaults, options || {});
+
+    if (options.stream) {
+        return this.print(stringify(obj, options), label, options);
+    } else {
+        return stringify(obj, options) + (options.styles ? &#x27;\033[39m&#x27; : &#x27;&#x27;);
+    }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+a customizable value inspector for Node.js
+
+synopsis
+--------
+
+I was tired of looking at cluttered output in the console -- something needed to be done,
+`sys.<span class="apidocCodeKeywordSpan">inspect</span>()` didn&#x27;t display regexps correctly, and was too verbose, and I had
+ an hour or two to spare.
+So I decided to have some fun. _eyes_ were born.
+
+![eyes-ss](http://dl.dropbox.com/u/251849/eyes-js-ss.gif)
+
+_example of the output of a user-customized eyes.js inspector_
+
+*eyes* also deals with circular objects in an intelligent way, and can pretty-print object literals.
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.eyes.eyes.inspector" id="apidoc.element.eyes.eyes.inspector">
+        function <span class="apidocSignatureSpan">eyes.eyes.</span>inspector
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">inspector = function (options) {
+    var that = this;
+    return function (obj, label, opts) {
+        return that.inspect.call(that, obj, label,
+            merge(options || {}, opts || {}));
+    };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+_example of the output of a user-customized eyes.js inspector_
+
+*eyes* also deals with circular objects in an intelligent way, and can pretty-print object literals.
+
+usage
+-----
+
+var inspect = require(&#x27;eyes&#x27;).<span class="apidocCodeKeywordSpan">inspector</span>({styles: {all: &#x27;magenta&#x27;}});
+
+inspect(something); // inspect with the settings passed to `inspector`
+
+or
+
+var eyes = require(&#x27;eyes&#x27;);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.eyes.eyes.print" id="apidoc.element.eyes.eyes.print">
+        function <span class="apidocSignatureSpan">eyes.eyes.</span>print
+        <span class="apidocSignatureSpan">(str, label, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">print = function (str, label, options) {
+    for (var c = 0, i = 0; i &#x3c; str.length; i++) {
+        if (str.charAt(i) === &#x27;\033&#x27;) { i += 4 } // `4` because &#x27;\033[25m&#x27;.length + 1 == 5
+        else if (c === options.maxLength) {
+           str = str.slice(0, i - 1) + &#x27;…&#x27;;
+           break;
+        } else { c++ }
+    }
+    return options.stream.write.call(options.stream, (label ?
+        this.stylize(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#x27;&#x27;) +
+        this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+// If we have a `stream` defined, use it to print a styled string,
+// if not, we just return the stringified object.
+eyes.inspect = function (obj, label, options) {
+    options = merge(this.defaults, options || {});
+
+    if (options.stream) {
+        return this.<span class="apidocCodeKeywordSpan">print</span>(stringify(obj, options), label, options);
+    } else {
+        return stringify(obj, options) + (options.styles ? &#x27;\033[39m&#x27; : &#x27;&#x27;);
+    }
+};
+
+// Output using the &#x27;stream&#x27;, and an optional label
+// Loop through `str`, and truncate it after `options.maxLength` has been reached.
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.eyes.eyes.stylize" id="apidoc.element.eyes.eyes.stylize">
+        function <span class="apidocSignatureSpan">eyes.eyes.</span>stylize
+        <span class="apidocSignatureSpan">(str, style, styles)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">stylize = function (str, style, styles) {
+    var codes = {
+        &#x27;bold&#x27;      : [1,  22],
+        &#x27;underline&#x27; : [4,  24],
+        &#x27;inverse&#x27;   : [7,  27],
+        &#x27;cyan&#x27;      : [36, 39],
+        &#x27;magenta&#x27;   : [35, 39],
+        &#x27;blue&#x27;      : [34, 39],
+        &#x27;yellow&#x27;    : [33, 39],
+        &#x27;green&#x27;     : [32, 39],
+        &#x27;red&#x27;       : [31, 39],
+        &#x27;grey&#x27;      : [90, 39]
+    }, endCode;
+
+    if (style &#x26;&#x26; codes[style]) {
+        endCode = (codes[style][1] === 39 &#x26;&#x26; styles.all) ? codes[styles.all][0]
+                                                         : codes[style][1];
+        return &#x27;\033[&#x27; + codes[style][0] + &#x27;m&#x27; + str +
+               &#x27;\033[&#x27; + endCode + &#x27;m&#x27;;
+    } else { return str }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+        if (str.charAt(i) === &#x27;\033&#x27;) { i += 4 } // `4` because &#x27;\033[25m&#x27;.length + 1 == 5
+        else if (c === options.maxLength) {
+           str = str.slice(0, i - 1) + &#x27;…&#x27;;
+           break;
+        } else { c++ }
+    }
+    return options.stream.write.call(options.stream, (label ?
+        this.<span class="apidocCodeKeywordSpan">stylize</span>(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#
+x27;&#x27;) +
+        this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
+};
+
+// Apply a style to a string, eventually,
+// I&#x27;d like this to support passing multiple
+// styles.
+eyes.stylize = function (str, style, styles) {
+...</pre></li>
     </ul>
 
 

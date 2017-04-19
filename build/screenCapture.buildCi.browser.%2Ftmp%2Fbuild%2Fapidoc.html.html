@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,15 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-    >eyes (v0.1.8)</a>
+    <a>eyes (v0.1.8)</a>
 </h1>
 <h4>a customizable value inspector</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.eyes">module eyes</a><ol>
 
@@ -174,7 +169,7 @@
     if (options.stream) {
         return this.print(stringify(obj, options), label, options);
     } else {
-        return stringify(obj, options) + (options.styles ? &#x27;\033[39m&#x27; : &#x27;&#x27;);
+        return stringify(obj, options) + (options.styles ? '\033[39m' : '');
     }
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -185,7 +180,7 @@ synopsis
 --------
 
 I was tired of looking at cluttered output in the console -- something needed to be done,
-`sys.<span class="apidocCodeKeywordSpan">inspect</span>()` didn&#x27;t display regexps correctly, and was too verbose, and I had
+`sys.<span class="apidocCodeKeywordSpan">inspect</span>()` didn't display regexps correctly, and was too verbose, and I had
  an hour or two to spare.
 So I decided to have some fun. _eyes_ were born.
 
@@ -221,13 +216,13 @@ _example of the output of a user-customized eyes.js inspector_
 usage
 -----
 
-var inspect = require(&#x27;eyes&#x27;).<span class="apidocCodeKeywordSpan">inspector</span>({styles: {all: &#x27;magenta&#x27;}});
+var inspect = require('eyes').<span class="apidocCodeKeywordSpan">inspector</span>({styles: {all: 'magenta'}});
 
 inspect(something); // inspect with the settings passed to `inspector`
 
 or
 
-var eyes = require(&#x27;eyes&#x27;);
+var eyes = require('eyes');
 ...</pre></li>
     </ul>
 
@@ -241,16 +236,16 @@ var eyes = require(&#x27;eyes&#x27;);
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">print = function (str, label, options) {
-    for (var c = 0, i = 0; i &#x3c; str.length; i++) {
-        if (str.charAt(i) === &#x27;\033&#x27;) { i += 4 } // `4` because &#x27;\033[25m&#x27;.length + 1 == 5
+    for (var c = 0, i = 0; i &lt; str.length; i++) {
+        if (str.charAt(i) === '\033') { i += 4 } // `4` because '\033[25m'.length + 1 == 5
         else if (c === options.maxLength) {
-           str = str.slice(0, i - 1) + &#x27;…&#x27;;
+           str = str.slice(0, i - 1) + 'â€¦';
            break;
         } else { c++ }
     }
     return options.stream.write.call(options.stream, (label ?
-        this.stylize(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#x27;&#x27;) +
-        this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
+        this.stylize(label, options.styles.label, options.styles) + ': ' : '') +
+        this.stylize(str,   options.styles.all, options.styles) + '\033[0m' + "\n");
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 
@@ -262,11 +257,11 @@ eyes.inspect = function (obj, label, options) {
     if (options.stream) {
         return this.<span class="apidocCodeKeywordSpan">print</span>(stringify(obj, options), label, options);
     } else {
-        return stringify(obj, options) + (options.styles ? &#x27;\033[39m&#x27; : &#x27;&#x27;);
+        return stringify(obj, options) + (options.styles ? '\033[39m' : '');
     }
 };
 
-// Output using the &#x27;stream&#x27;, and an optional label
+// Output using the 'stream', and an optional label
 // Loop through `str`, and truncate it after `options.maxLength` has been reached.
 ...</pre></li>
     </ul>
@@ -282,40 +277,40 @@ eyes.inspect = function (obj, label, options) {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">stylize = function (str, style, styles) {
     var codes = {
-        &#x27;bold&#x27;      : [1,  22],
-        &#x27;underline&#x27; : [4,  24],
-        &#x27;inverse&#x27;   : [7,  27],
-        &#x27;cyan&#x27;      : [36, 39],
-        &#x27;magenta&#x27;   : [35, 39],
-        &#x27;blue&#x27;      : [34, 39],
-        &#x27;yellow&#x27;    : [33, 39],
-        &#x27;green&#x27;     : [32, 39],
-        &#x27;red&#x27;       : [31, 39],
-        &#x27;grey&#x27;      : [90, 39]
+        'bold'      : [1,  22],
+        'underline' : [4,  24],
+        'inverse'   : [7,  27],
+        'cyan'      : [36, 39],
+        'magenta'   : [35, 39],
+        'blue'      : [34, 39],
+        'yellow'    : [33, 39],
+        'green'     : [32, 39],
+        'red'       : [31, 39],
+        'grey'      : [90, 39]
     }, endCode;
 
-    if (style &#x26;&#x26; codes[style]) {
-        endCode = (codes[style][1] === 39 &#x26;&#x26; styles.all) ? codes[styles.all][0]
+    if (style &amp;&amp; codes[style]) {
+        endCode = (codes[style][1] === 39 &amp;&amp; styles.all) ? codes[styles.all][0]
                                                          : codes[style][1];
-        return &#x27;\033[&#x27; + codes[style][0] + &#x27;m&#x27; + str +
-               &#x27;\033[&#x27; + endCode + &#x27;m&#x27;;
+        return '\033[' + codes[style][0] + 'm' + str +
+               '\033[' + endCode + 'm';
     } else { return str }
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-        if (str.charAt(i) === &#x27;\033&#x27;) { i += 4 } // `4` because &#x27;\033[25m&#x27;.length + 1 == 5
+        if (str.charAt(i) === '\033') { i += 4 } // `4` because '\033[25m'.length + 1 == 5
         else if (c === options.maxLength) {
-           str = str.slice(0, i - 1) + &#x27;…&#x27;;
+           str = str.slice(0, i - 1) + 'â€¦';
            break;
         } else { c++ }
     }
     return options.stream.write.call(options.stream, (label ?
-        this.<span class="apidocCodeKeywordSpan">stylize</span>(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#
-x27;&#x27;) +
-        this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
+        this.<span class="apidocCodeKeywordSpan">stylize</span>(label, options.styles.label, options.styles) + ': ' : &amp;#
+x27;') +
+        this.stylize(str,   options.styles.all, options.styles) + '\033[0m' + "\n");
 };
 
 // Apply a style to a string, eventually,
-// I&#x27;d like this to support passing multiple
+// I'd like this to support passing multiple
 // styles.
 eyes.stylize = function (str, style, styles) {
 ...</pre></li>
@@ -345,7 +340,7 @@ eyes.stylize = function (str, style, styles) {
     if (options.stream) {
         return this.print(stringify(obj, options), label, options);
     } else {
-        return stringify(obj, options) + (options.styles ? &#x27;\033[39m&#x27; : &#x27;&#x27;);
+        return stringify(obj, options) + (options.styles ? '\033[39m' : '');
     }
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -356,7 +351,7 @@ synopsis
 --------
 
 I was tired of looking at cluttered output in the console -- something needed to be done,
-`sys.<span class="apidocCodeKeywordSpan">inspect</span>()` didn&#x27;t display regexps correctly, and was too verbose, and I had
+`sys.<span class="apidocCodeKeywordSpan">inspect</span>()` didn't display regexps correctly, and was too verbose, and I had
  an hour or two to spare.
 So I decided to have some fun. _eyes_ were born.
 
@@ -392,13 +387,13 @@ _example of the output of a user-customized eyes.js inspector_
 usage
 -----
 
-var inspect = require(&#x27;eyes&#x27;).<span class="apidocCodeKeywordSpan">inspector</span>({styles: {all: &#x27;magenta&#x27;}});
+var inspect = require('eyes').<span class="apidocCodeKeywordSpan">inspector</span>({styles: {all: 'magenta'}});
 
 inspect(something); // inspect with the settings passed to `inspector`
 
 or
 
-var eyes = require(&#x27;eyes&#x27;);
+var eyes = require('eyes');
 ...</pre></li>
     </ul>
 
@@ -412,16 +407,16 @@ var eyes = require(&#x27;eyes&#x27;);
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">print = function (str, label, options) {
-    for (var c = 0, i = 0; i &#x3c; str.length; i++) {
-        if (str.charAt(i) === &#x27;\033&#x27;) { i += 4 } // `4` because &#x27;\033[25m&#x27;.length + 1 == 5
+    for (var c = 0, i = 0; i &lt; str.length; i++) {
+        if (str.charAt(i) === '\033') { i += 4 } // `4` because '\033[25m'.length + 1 == 5
         else if (c === options.maxLength) {
-           str = str.slice(0, i - 1) + &#x27;…&#x27;;
+           str = str.slice(0, i - 1) + 'â€¦';
            break;
         } else { c++ }
     }
     return options.stream.write.call(options.stream, (label ?
-        this.stylize(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#x27;&#x27;) +
-        this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
+        this.stylize(label, options.styles.label, options.styles) + ': ' : '') +
+        this.stylize(str,   options.styles.all, options.styles) + '\033[0m' + "\n");
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 
@@ -433,11 +428,11 @@ eyes.inspect = function (obj, label, options) {
     if (options.stream) {
         return this.<span class="apidocCodeKeywordSpan">print</span>(stringify(obj, options), label, options);
     } else {
-        return stringify(obj, options) + (options.styles ? &#x27;\033[39m&#x27; : &#x27;&#x27;);
+        return stringify(obj, options) + (options.styles ? '\033[39m' : '');
     }
 };
 
-// Output using the &#x27;stream&#x27;, and an optional label
+// Output using the 'stream', and an optional label
 // Loop through `str`, and truncate it after `options.maxLength` has been reached.
 ...</pre></li>
     </ul>
@@ -453,40 +448,40 @@ eyes.inspect = function (obj, label, options) {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">stylize = function (str, style, styles) {
     var codes = {
-        &#x27;bold&#x27;      : [1,  22],
-        &#x27;underline&#x27; : [4,  24],
-        &#x27;inverse&#x27;   : [7,  27],
-        &#x27;cyan&#x27;      : [36, 39],
-        &#x27;magenta&#x27;   : [35, 39],
-        &#x27;blue&#x27;      : [34, 39],
-        &#x27;yellow&#x27;    : [33, 39],
-        &#x27;green&#x27;     : [32, 39],
-        &#x27;red&#x27;       : [31, 39],
-        &#x27;grey&#x27;      : [90, 39]
+        'bold'      : [1,  22],
+        'underline' : [4,  24],
+        'inverse'   : [7,  27],
+        'cyan'      : [36, 39],
+        'magenta'   : [35, 39],
+        'blue'      : [34, 39],
+        'yellow'    : [33, 39],
+        'green'     : [32, 39],
+        'red'       : [31, 39],
+        'grey'      : [90, 39]
     }, endCode;
 
-    if (style &#x26;&#x26; codes[style]) {
-        endCode = (codes[style][1] === 39 &#x26;&#x26; styles.all) ? codes[styles.all][0]
+    if (style &amp;&amp; codes[style]) {
+        endCode = (codes[style][1] === 39 &amp;&amp; styles.all) ? codes[styles.all][0]
                                                          : codes[style][1];
-        return &#x27;\033[&#x27; + codes[style][0] + &#x27;m&#x27; + str +
-               &#x27;\033[&#x27; + endCode + &#x27;m&#x27;;
+        return '\033[' + codes[style][0] + 'm' + str +
+               '\033[' + endCode + 'm';
     } else { return str }
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-        if (str.charAt(i) === &#x27;\033&#x27;) { i += 4 } // `4` because &#x27;\033[25m&#x27;.length + 1 == 5
+        if (str.charAt(i) === '\033') { i += 4 } // `4` because '\033[25m'.length + 1 == 5
         else if (c === options.maxLength) {
-           str = str.slice(0, i - 1) + &#x27;…&#x27;;
+           str = str.slice(0, i - 1) + 'â€¦';
            break;
         } else { c++ }
     }
     return options.stream.write.call(options.stream, (label ?
-        this.<span class="apidocCodeKeywordSpan">stylize</span>(label, options.styles.label, options.styles) + &#x27;: &#x27; : &#
-x27;&#x27;) +
-        this.stylize(str,   options.styles.all, options.styles) + &#x27;\033[0m&#x27; + &#x22;\n&#x22;);
+        this.<span class="apidocCodeKeywordSpan">stylize</span>(label, options.styles.label, options.styles) + ': ' : &amp;#
+x27;') +
+        this.stylize(str,   options.styles.all, options.styles) + '\033[0m' + "\n");
 };
 
 // Apply a style to a string, eventually,
-// I&#x27;d like this to support passing multiple
+// I'd like this to support passing multiple
 // styles.
 eyes.stylize = function (str, style, styles) {
 ...</pre></li>
@@ -503,3 +498,4 @@ eyes.stylize = function (str, style, styles) {
     ]
 </div>
 </div>
+</body></html>
